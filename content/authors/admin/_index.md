@@ -16,13 +16,16 @@ status:
 # Is this the primary user of the site?
 superuser: true
 
+# Highlight the author in author lists? (true/false)
+highlight_name: true
+
 # Role/position/tagline
-role: ''#Director of Cloud Infrastructure
+role: ''
 
 # Organizations/Affiliations to display in Biography blox
 organizations:
-  - name: GenCoin
-    url: https://www.example.com/
+  - name: ''
+    #url: https://openai.com/
 
 # Social network links
 # Need to use another icon? Simply download the SVG icon to your `assets/media/icons/` folder.
@@ -38,6 +41,12 @@ profiles:
     #url: https://www.linkedin.com/
   #- icon: brands/instagram
     #url: https://www.instagram.com/
+
+interests:
+  - Artificial Intelligence
+  - High-Dimensional Hidden State Models
+  - Nonparametric Statistics
+  - Time Series Modelling
 
 education:
   - area: Master of Science in Mathematical Statistics
@@ -76,6 +85,8 @@ education:
 
 # Skills
 # Add your own SVG icons to `assets/media/icons/`
+# Skills
+# Add your own SVG icons to `assets/media/icons/`
 skills:
   - name: Technical Skills
     items:
@@ -91,6 +102,14 @@ skills:
         description: ''
         percent: 80
         icon: devicon/Matlab
+      - name: LaTeX
+        description: ''
+        percent: 80
+        icon: devicon/latex
+      - name: C++
+        description: ''
+        percent: 80
+        icon: devicon/c-plus-plus
   #- name: Hobbies
     #color: '#eeac02'
     #color_border: '#f0bf23'
@@ -99,7 +118,7 @@ skills:
     #    description: ''
    #     percent: 60
      #   icon: person-simple-walk
-     
+
 languages:
   - name: English
     percent: 80
@@ -112,19 +131,15 @@ languages:
 #   Only `title`, `awarder`, and `date` are required.
 #   Begin multi-line `summary` with YAML's `|` or `|2-` multi-line prefix and indent 2 spaces below.
  
-
 awards:
   - title: 'China National Scholarship'
-    #url: https://www.coursera.org/learn/neural-networks-deep-learning
-    date: '2023'
-    awarder: 'Ministry of Education of the People's Repubilc of China'
-    #icon: coursera
-    #summary: |
-      #I studied the foundational concept of neural networks and deep learning. By the end, I was familiar with the significant technological trends driving the rise of deep learning; build, train, and apply fully connected deep neural networks; implement efficient (vectorized) neural networks; identify key parameters in a neural network’s architecture; and apply deep learning to your own applications.
-  - title: 'Outstanding Graduate and Outstanding Thesis'
-    #url: https://www.edx.org/professional-certificate/uc-berkeleyx-blockchain-fundamentals
-    date: '2024'
-    awarder: 'ZUEL'
+    url: ''
+    date: '2023-12-01'
+    awarder: Ministry of Education of the People's Repubilc of China
+  
+  - title: Outstanding Graduate and Outstanding Thesis
+    date: '2024-06-01'
+    awarder: ZUEL
     #icon: edx
     #summary: |
       #Learned:
@@ -132,19 +147,20 @@ awards:
       #- Gain an in-depth understanding of the specific mechanics of Bitcoin
       #- Understand Bitcoin’s real-life applications and learn how to attack and destroy Bitcoin, Ethereum, smart contracts and Dapps, and alternatives to Bitcoin’s Proof-of-Work consensus algorithm
   
-  - title: 'Second Prize in National Graduate Student Market Survey and Analysis Contest'
-    date: '2023'
-    awarder: 'Commerce Statistical Society of China'
+  - title: Second Prize in National Graduate Student Market Survey and Analysis Contest
+    date: '2023-05-01'
+    awarder: Commerce Statistical Society of China
 
-  - title: 'Second Prize in National Graduate Student Case Competition in Applied Statistics'
-      date: '2022'
-      awarder: 'National Mas Education Steering Committee'
+  - title: Second Prize in National Graduate Student Case Competition in Applied Statistics
+    date: '2022-10-01'
+    awarder: National Mas Education Steering Committee
 
-  - title: 'First Prize in China Undergraduate Mathematical Contest in Modelling (CUMCM)'
-      url: https://en.mcm.edu.cn/
-      date: '2020'
-      awarder: ' CSIAM (China Society for Industrial and Applied Mathematics)'
-    
+  - title: First Prize in China Undergraduate Mathematical Contest in Modelling (CUMCM)
+    url: https://en.mcm.edu.cn/
+    date: '2019-11-01'
+    awarder: CSIAM (China Society for Industrial and Applied Mathematics) 
 ---
+
+## About Me
 
 Hello, there! My current research interests focus on high-dimensional hidden state models and nonparametric statistics. These studies are primarily applied to fields such as economics, energy, and climate, aiming to analyze complex data through advanced statistical techniques and propose innovative solutions to address various challenges we face today.

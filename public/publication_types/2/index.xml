@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2 | Hugo Academic CV Theme</title>
+    <link>http://localhost:1313/publication_types/2/</link>
+      <atom:link href="http://localhost:1313/publication_types/2/index.xml" rel="self" type="application/rss+xml" />
+    <description>2</description>
+    <generator>Hugo Blox Builder (https://hugoblox.com)</generator><language>en-us</language><lastBuildDate>Fri, 01 Dec 2023 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>http://localhost:1313/media/icon_hu7729264130191091259.png</url>
+      <title>2</title>
+      <link>http://localhost:1313/publication_types/2/</link>
+    </image>
+    
+    <item>
+      <title>A Bayesian estimation approach of random switching exponential smoothing with application to credit forecast</title>
+      <link>http://localhost:1313/publication/frl-2023/</link>
+      <pubDate>Fri, 01 Dec 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/publication/frl-2023/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Learning Performance Analysis of Perceptron Model Based on Markov Sampling</title>
+      <link>http://localhost:1313/publication/acta-mathematicae-applicatae-sinica/</link>
+      <pubDate>Fri, 01 Dec 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/publication/acta-mathematicae-applicatae-sinica/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

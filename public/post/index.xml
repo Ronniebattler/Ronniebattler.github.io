@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog | Hugo Academic CV Theme</title>
+    <link>http://localhost:1313/post/</link>
+      <atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" />
+    <description>Blog</description>
+    <generator>Hugo Blox Builder (https://hugoblox.com)</generator><language>en-us</language><lastBuildDate>Mon, 30 Oct 2023 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>http://localhost:1313/media/icon_hu7729264130191091259.png</url>
+      <title>Blog</title>
+      <link>http://localhost:1313/post/</link>
+    </image>
+    
+    <item>
+      <title>Viterbi Algorithm</title>
+      <link>http://localhost:1313/post/viterbi/</link>
+      <pubDate>Mon, 30 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/post/viterbi/</guid>
+      <description>
+
+
+&lt;details class=&#34;print:hidden xl:hidden&#34; open&gt;
+  &lt;summary&gt;Table of Contents&lt;/summary&gt;
+  &lt;div class=&#34;text-sm&#34;&gt;
+  &lt;nav id=&#34;TableOfContents&#34;&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href=&#34;#viterbi算法&#34;&gt;Viterbi算法&lt;/a&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&#34;#算法步骤&#34;&gt;算法步骤&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&#34;#伪代码&#34;&gt;伪代码&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/li&gt;
+    &lt;li&gt;&lt;a href=&#34;#example&#34;&gt;Example&lt;/a&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&#34;#markov-switching模型示例&#34;&gt;Markov Switching模型示例&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;h2 id=&#34;viterbi算法&#34;&gt;Viterbi算法&lt;/h2&gt;
+&lt;p&gt;维特比算法，也称为维特比译码算法，是一种动态规划技术，用于确定生成给定观察事件序列的最可能的隐藏状态序列，即维特比路径。它在马尔可夫信息源和隐马尔可夫模型（HMM）等领域广泛应用。&lt;/p&gt;
+&lt;p&gt;“维特比路径”和“维特比算法”这两个术语还用于各种动态规划算法，旨在识别观察结果的最可能解释。例如，在统计句法分析中，动态规划算法可用于发现最可能的上下文无关派生（句法树）的字符串，有时称为“维特比分析”。&lt;/p&gt;
+&lt;p&gt;维特比算法最初由安德鲁·维特比（Andrew Viterbi）于1967年提出，用于解码数字通信系统中的卷积码，以减小噪音的影响。此算法在许多领域得到广泛应用，包括CDMA和GSM蜂窝网络、拨号调制解调器、卫星通信、深空通信以及802.11无线网络，用于解码卷积码。此外，它经常用于语音识别、关键词检测、计算语言学和生物信息学等任务。例如，在语音识别领域，其中音频信号被视为观察到的事件序列，而文本字符串被视为生成观察到的音频信号的潜在原因，因此维特比算法用于识别与音频信号相关的最可能的文本字符串。&lt;/p&gt;
+&lt;h3 id=&#34;算法步骤&#34;&gt;算法步骤&lt;/h3&gt;
+&lt;p&gt;Viterbi算法&lt;/p&gt;
+&lt;p&gt;目的: 给定一个观测序列和一个隐马尔可夫模型(HMM)，找到最有可能的隐状态序列。&lt;/p&gt;
+&lt;p&gt;输入:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;观测序列: $O=\left\{o_1, o_2, \ldots,
+    o_T\right\}$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;状态转移概率矩阵: $P$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;观测概率矩阵: $B$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;初始状态概率: $\pi$&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;输出:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;最有可能的隐状态序列: $S^*=\left\{s_1^*, s_2^*, \ldots, s_T^*\right\}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;伪代码&#34;&gt;伪代码&lt;/h3&gt;
+&lt;p&gt;首先是一些问题必要的设置。设观察值空间为 $O=\left\{o_1, o_2, \ldots, o_N\right\}$ 、状态空间为 $S=\left\{s_1, s_2, \ldots, s_K\right\}$ 、观察值序列为 $Y=\left\{y_1, y_2, \ldots, y_T\right\}, A$ 为 $K \times K$ 转移矩阵，其中 $A_{i j}$ 为从状态 $s_i$ 转移到 $s_j$ 的转移概率、 $B$ 为 $K \times N$ 放射矩阵(emission matrix)，其中 $B_{i j}$ 为在状态 $s_i$ 观察到 $o_j$ 的概率、大小为 $K$ 的初始概率数组 $\pi $， $\pi_i$ 为 $x_1==s_i$ 的概率。我们称路径 $X=\left\{x_1, x_2, \ldots, x_T\right\}$ 为生成观察值 $Y=\left\{y_1, y_2, \ldots, y_T\right\}$ 的状态序列。&lt;/p&gt;
+&lt;p&gt;在这个动态规划问题中，我们构造了两个大小为 $K \times T$ 的二维表 $T_1, T_2$ 。 $T_1$ 的每个元素， $T_1[i, j]$ ，保存生成 $Y=\left\{y_1, y_2, \ldots, y_j\right\}$ 时最有可能的路径 $\hat{X}=\left\{\hat{x}_1, \hat{x}_2, \ldots, \hat{x}_j\right\} ， \hat{x}_j=s_i$ 的概率。 $T_2$ 的每个元素， $T_2[i, j]$ ，保存最有可能路径 $\hat{X}=\left\{\hat{x}_1, \hat{x}_2, \ldots, \hat{x}_{j-1}, \hat{x}_j\right\}$ ， $\forall j, 2 \leq j \leq T$ 的 $\hat{x}_{j-1}$ 。&lt;/p&gt;
+&lt;p&gt;我们按 $K \cdot j+i$ 增序填充两个表 $T_1[i, j], T_2[i, j]$ 。
+&lt;/p&gt;
+$$
+\begin{aligned}
+    &amp; T_1[i, j]=\max _k\left(T_1[k, j-1] \cdot A_{k i} \cdot B_{i y_j}\right), \\
+    &amp; T_2[i, j]=\arg \max _k\left(T_1[k, j-1] \cdot A_{k i} \cdot B_{i y_j}\right)
+\end{aligned}
+$$&lt;p&gt;输入&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;观察空间 $O=\left\{o_1, o_2, \ldots, o_N\right\}$ ，&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;状态 $S=\left\{s_1, s_2, \ldots, s_K\right\}$ ，&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;观察序列 $Y=\left\{y_1, y_2, \ldots, y_T\right\}$ 若在 $t$ 时间观察值为 $o_i$ ，则 $y_t==i$,&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;大小为 $K \cdot K$ 的转移矩阵 $A, A_{i j}$ 为从状态 $s_i$ 到 $s_j$ 的转移概率，&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;大小为 $K \cdot N$ 的放射矩阵 $B, B_{i j}$ 为状态 $s_i$ 观察到 $o_j$ 的概率，&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;大小为 $K$ 的初始概率数组 $\pi, \pi_i$ 为 $x_1==s_i$ 的概率，&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;输出&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;最有可能的隐含状态序列 $X=\left\{x_1, x_2, \ldots, x_T\right\}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
+&lt;h3 id=&#34;markov-switching模型示例&#34;&gt;Markov Switching模型示例&lt;/h3&gt;
+&lt;p&gt;假设我们有两个状态：一个低均值状态和一个高均值状态。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;隐状态集合: $S=\{1,2\}$&lt;/li&gt;
+&lt;li&gt;观测值: $O=\left\{o_1, o_2, \ldots, o_T\right\}$ 是实数值时间序列数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;状态转移概率矩阵 $P$ 为:
+&lt;/p&gt;
+$$
+P=\left[\begin{array}{ll}
+    0.8 &amp; 0.2 \\
+    0.3 &amp; 0.7
+\end{array}\right]
+$$&lt;p&gt;我们假设在状态 1 (低均值状态) 时，观测值的均值为 2 ，标准差为 1 ; 而在状态 2 (高均值状态) 时，观测值的均值为 5 ，标准差为1。&lt;/p&gt;
+&lt;p&gt;现在，假设我们有以下观测序列: $O=\{2.1,5.2,5.0,2.3,2.0,5.1\}$ 。我们的目标是使用 Viterbi算法确定最有可能的状态链。&lt;/p&gt;
+&lt;p&gt;使用Viterbi算法：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;初始化:&lt;/p&gt;
+&lt;p&gt;使用初始状态概率和第一个观测值的概率密度函数来初始化每个状态的概率。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;递归计算:&lt;/p&gt;
+&lt;p&gt;对于每个时间点 $t$ ，对于每个状态 $j$ ，计算:
+&lt;/p&gt;
+$$
+    V[t, j]=\max _i\left(V[t-1, i] \times P[i, j] \times \operatorname{PDF}\left(o_t \mid \text { state } j\right)\right)
+    $$&lt;p&gt;其中，PDF表示概率密度函数，它是在给定状态时观测值的概率。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;终止:&lt;/p&gt;
+&lt;p&gt;在最后一个时间点 $T$ ，找到具有最大概率的状态。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;回溯路径:&lt;/p&gt;
+&lt;p&gt;从最后一个时间点开始，使用回溯指针回溯到第一个时间点，确定整个状态链。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-Matlab&#34; data-lang=&#34;Matlab&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;% Define the state transition probability matrix and observation matrices&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;0.8&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.7&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;mean_vals&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;  &lt;span class=&#34;c&#34;&gt;% means for states 1 and 2 respectively&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;std_devs&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;  &lt;span class=&#34;c&#34;&gt;% standard deviations for states 1 and 2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;% Define the observed sequence&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;O&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;2.1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;5.2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;5.0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;2.3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;2.0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;5.1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;length&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;O&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;num_states&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;% Initialization&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;V&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;zeros&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;num_states&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;ptr&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;zeros&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;num_states&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;num_states&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;V&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;normpdf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;O&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mean_vals&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;std_devs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;% Recursive computation&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;t&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;j&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;num_states&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c&#34;&gt;% Calculate the maximum probability and the state that resulted in this max probability&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;max_prob&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;argmax_state&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;max&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;V&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;.*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(:,&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;.*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;normpdf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;O&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mean_vals&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;std_devs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;V&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;max_prob&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;ptr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;argmax_state&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;% Backtracking the most probable path&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;states&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;backtrack&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;V&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ptr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;% Backtrack function&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;states &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;backtrack&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;V, ptr&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;size&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;V&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;states&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)]&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;max&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;V&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;t&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;states&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ptr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;states&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>Example of Regime Switching State Space Model</title>
+      <link>http://localhost:1313/post/kim-filter/</link>
+      <pubDate>Fri, 27 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/post/kim-filter/</guid>
+      <description>
+
+
+&lt;details class=&#34;print:hidden xl:hidden&#34; open&gt;
+  &lt;summary&gt;Table of Contents&lt;/summary&gt;
+  &lt;div class=&#34;text-sm&#34;&gt;
+  &lt;nav id=&#34;TableOfContents&#34;&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href=&#34;#regime-switching-state-space-model&#34;&gt;Regime Switching State Space Model&lt;/a&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&#34;#model-description&#34;&gt;Model Description&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&#34;#kalman-filtering&#34;&gt;Kalman Filtering&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/li&gt;
+    &lt;li&gt;&lt;a href=&#34;#kim1994s-collapsing-procedure&#34;&gt;Kim(1994)’s Collapsing procedure&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&#34;#kim-1994-filter-for-regime-switching-state-space-model&#34;&gt;Kim (1994) Filter for Regime Switching State Space model&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;h2 id=&#34;regime-switching-state-space-model&#34;&gt;Regime Switching State Space Model&lt;/h2&gt;
+&lt;h3 id=&#34;model-description&#34;&gt;Model Description&lt;/h3&gt;
+&lt;p&gt;As an example of a regime switching state space model, Prof. Kim used the following generalized Hamilton model for the log of real GNP (Lam; 1990) in his paper and book.&lt;/p&gt;
+$$
+\begin{aligned}
+    \ln \left(G N P_t\right) &amp; =n_t+x_t \\
+    n_t &amp; =n_{t-1}+\mu_0+\mu_1 s_t \\
+    x_t &amp; =\phi_1 x_{t-1}+\phi_2 x_{t-2}+u_t \\
+    u_t &amp; \sim N\left(0, \sigma^2\right) \\
+    s_t &amp; =0,1 \quad P_{t j}=\left[\begin{array}{ll}
+        p_{00} &amp; p_{01} \\
+        p_{10} &amp; p_{11}
+    \end{array}\right]
+\end{aligned}
+$$&lt;p&gt;where $\ln \left(G N P_t\right)$ is a real GNP level. $n_t$ is a deterministic series with a regimeswitching growth rate and $x_t$ is stationary AR(2) cycle process.&lt;/p&gt;
+&lt;p&gt;Since $\ln \left(G N P_t\right)$ is the log level variable, the difference of it, $y_t=\ln \left(G N P_t\right)-\ln \left(G N P_{t-1}\right)$, can be represented as a state space model in the following way.&lt;/p&gt;
+$$\begin{aligned}
+    &amp; y_t=\mu_0+\mu_1 s_t+x_t-x_{t-1} \\
+    &amp; x_t=\phi_1 x_{t-1}+\phi_2 x_{t-2}+u_t
+\end{aligned}
+$$&lt;p&gt;
+It is a typical approach that a state space model is represented as a vector-matrix form for using Kalman filter as follows.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    y_t &amp; =\mu_{s_t}+\left[\begin{array}{ll}
+        1 &amp; -1
+    \end{array}\right]\left[\begin{array}{c}
+        x_t \\
+        x_{t-1}
+    \end{array}\right] \\
+    {\left[\begin{array}{c}
+            x_t \\
+            x_{t-1}
+        \end{array}\right] } &amp; =\left[\begin{array}{cc}
+        \phi_1 &amp; \phi_2 \\
+        1 &amp; 0
+    \end{array}\right]\left[\begin{array}{c}
+        x_{t-1} \\
+        x_{t-2}
+    \end{array}\right]+\left[\begin{array}{c}
+        u_t \\
+        0
+    \end{array}\right] \\
+    u_t &amp; \sim N\left(0, \sigma^2\right) \\
+    \mu_{s_t} &amp; =\mu_0+\mu_1 s_t, \quad \mu_1&gt;0 \\
+    s_t &amp; =0,1 \quad P_{t j}=\left[\begin{array}{ll}
+        p_{00} &amp; p_{01} \\
+        p_{10} &amp; p_{11}
+    \end{array}\right] \\
+    \Downarrow &amp; \\
+    y_t &amp; =\mu_{s_t}+F \mathbf{x}_t \\
+    \mathbf{x}_t &amp; =A \mathbf{x}_{t-1}+v_t
+\end{aligned}$$&lt;p&gt;For the sake of notational simplicity, we use $x_t$ instead of $\mathbf{x}_t$.&lt;/p&gt;
+&lt;h3 id=&#34;kalman-filtering&#34;&gt;Kalman Filtering&lt;/h3&gt;
+&lt;p&gt;Kalman filter with regime switching is used to get state estimates from a state space model taking regime transition into account and has the following recursion.&lt;/p&gt;
+$$
+\begin{aligned}
+    x_{t \mid t-1}^{i j} &amp; =A x_{t-1 \mid t-1}^i \\
+    P_{t \mid t-1}^{i j} &amp; =A P_{t-1 \mid t-1}^i A^T+Q \\
+    \eta_{t \mid t-1}^{i j} &amp; =y_t-\mu_j-F x_{t \mid t-1}^{i j} \\
+    H_{t \mid t-1}^{i j} &amp; =F P_{t \mid t-1}^{i j} F^T+R \\
+    K^{i j} &amp; =P_{t \mid t-1}^{i j} F^T\left[H_{t \mid t-1}^{i j}\right]^{-1} \\
+    x_{t \mid t}^{i j} &amp; =x_{t \mid t-1}^{i j}+K^{i j} \eta_{t \mid t-1}^{i j} \\
+    P_{t \mid t}^{i j} &amp; =\left(I-K^{i j} F\right) P_{t \mid t-1}^{i j}
+\end{aligned}
+$$&lt;p&gt;
+In regime-dependent Kalman filter, all the notations are augmented with superscript $\{i j\}$ except $x_{t-1 \mid t-1}^i$ and $P_{t-1 \mid t-1}^i$ since these two estimates are in i-state (two-state) but other estimates must reflect state transitions from i to $\mathrm{j}$ (four-state). For example, $x_{t \mid t-1}$ and $x_{t \mid t-1}^{i j}$ are different in terms of conditioning information.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    x_{t \mid t-1} &amp; =E\left[X_t \mid \psi_{t-1}\right] \\
+    x_{t \mid t-1}^{i j} &amp; =E\left[X_t \mid \psi_{t-1}, S_t=j, S_{t-1}=i\right]
+\end{aligned}
+$$&lt;p&gt;
+In contrast to the single regime, however, in the multiple regimes, $x_{t \mid t}^{i j}$ and $P_{t \mid t}^{i j}$ cannot be used the next state prediction due simply to the mismatch both 1) between $x_{t \mid t}^{i j}$ and $x_{t-1 \mid t-1}^i$ and 2) between $P_{t \mid t}^{i j}$ and $P_{t-1 \mid t-1}^i$. To resolve this mismatch problem, Kim (1994) developed a dimension collapsing algorithm.&lt;/p&gt;
+&lt;h2 id=&#34;kim1994s-collapsing-procedure&#34;&gt;Kim(1994)’s Collapsing procedure&lt;/h2&gt;
+&lt;p&gt;Kim (1994) introduces a collapsing procedure (approximation) to reduce the $(M \times M)$ posteriors $\left(x_{t \mid t}^{i j}\right.$ and $P_{t \mid t}^{i j}$ ) into $M$ to complete the above Kalman filter recursion.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    x_{t \mid t}^j &amp; =\frac{\sum_{i=1}^M P\left[S_{t-1}=i, S_t=j \mid \psi_t\right] x_{t \mid t}^{i j}}{P\left[S_t=j \mid \psi_t\right]} \\
+    P_{t \mid t}^j &amp; =\frac{\sum_{i=1}^M P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]\left[P_{t \mid t}^{i j}+\left(x_{t \mid t}^j-x_{t \mid t}^{i j}\right)\left(x_{t \mid t}^j-x_{t \mid t}^{i j}\right)^T\right]}{P\left[S_t=j \mid \psi_t\right]}
+\end{aligned}
+$$&lt;p&gt;
+To calculate the above approximation, when we calculate $P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]$, $P\left[S_t=j \mid \psi_t\right]$ is easily obtained by summing its $\mathrm{M}$ branches from each i states.
+&lt;/p&gt;
+$$
+P\left[S_t=j \mid \psi_t\right]=\sum_{i=1}^M P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]
+$$&lt;p&gt;
+Knowing $P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]$ means that we observe time t data since the last time of information set is $t$ and the state is migrated from $i$ to $j$. For this data information into account, we can think of the marginal probability of state transition by integrating out data.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    &amp; P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]=\frac{f\left(y_t, S_{t-1}=i, S_t=j \mid \psi_{t-1}\right)}{f\left(y_t \mid \psi_{t-1}\right)} \\
+    &amp; f\left(y_t \mid \psi_{t-1}\right)=\sum_{j=1}^M \sum_{i=1}^M f\left(y_t, S_{t-1}=i, S_t=j \mid \psi_{t-1}\right)
+\end{aligned}
+$$&lt;p&gt;
+As can be seen from the above equations, when we know $f\left(y_t, S_{t-1}=i, S_t=j \mid \psi_{t-1}\right)$ which is the joint density of data and two states, $P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]$ and $f\left(y_t \mid \psi_{t-1}\right)$ are easily obtained. We get the following the joint density.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    &amp; f\left(y_t, S_{t-1}=i, S_t=j \mid \psi_{t-1}\right) \\
+    &amp; =f\left(y_t \mid S_{t-1}=i, S_t=j, \psi_{t-1}\right) \times P\left(S_{t-1}=i, S_t=j \mid \psi_{t-1}\right)
+\end{aligned}
+$$&lt;p&gt;
+Now we need to know two parts. The first part is the forecast error given data. (MVN : probability density function of multivariate normal distribution with zero mean and forecast error variance)
+&lt;/p&gt;
+$$
+\begin{aligned}
+    &amp; f\left(y_t \mid S_{t-1}=i, S_t=j, \psi_{t-1}\right) \\
+    &amp; =M V N \text { (forecast error, its variance) }
+\end{aligned}
+$$&lt;p&gt;
+The second part is calculated by the multiplication of the transition probability and the summation of its branches.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    &amp; P\left(S_{t-1}=i, S_t=j \mid \psi_{t-1}\right) \\
+    &amp; =P\left[S_t=j \mid S_{t-1}=i\right] \times \sum_{k=1}^M f\left(S_{t-2}=k, S_{t-1}=i \mid \psi_{t-1}\right) \\
+    &amp; =P_{i j} \times f\left(S_{t-1}=i \mid \psi_{t-1}\right)
+\end{aligned}
+$$&lt;p&gt;
+In the above equation, as we know, $P_{i j}$ is already known as transition probability matrix and $f\left(S_{t-2}=k, S_{t-1}=i \mid \psi_{t-1}\right)$ is exactly what we want to find but evaluated at the previous t- 1 time. Therefore for the iteration, $f\left(S_{-1}=k, S_0=i \mid \psi_0\right)$ calls for initialization with the steady state probabilities.
+Therefore, we can calculate $P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]$ and $P\left[S_t=j \mid \psi_t\right]$ through the above equations.&lt;/p&gt;
+&lt;h2 id=&#34;kim-1994-filter-for-regime-switching-state-space-model&#34;&gt;Kim (1994) Filter for Regime Switching State Space model&lt;/h2&gt;
+&lt;p&gt;Kim filtering procedure is summarized in a sequence of equations.
+Kalman Filtering
+&lt;/p&gt;
+$$
+\begin{aligned}
+    x_{t \mid t-1}^{i j} &amp; =A x_{t-1 \mid t-1}^i \\
+    P_{t \mid t-1}^{i j} &amp; =A P_{t-1 \mid t-1}^i A^T+Q \\
+    \eta_{t \mid t-1}^{i j} &amp; =y_t-\mu_j-F x_{t \mid t-1}^{i j} \\
+    H_{t \mid t-1}^{i j} &amp; =F P_{t \mid t-1}^{i j} F^T+R \\
+    K^{i j} &amp; =P_{t \mid t-1}^{i j} F^T\left[H_{t \mid t-1}^{i j}\right]^{-1} \\
+    x_{t \mid t}^{i j} &amp; =x_{t \mid t-1}^{i j}+K^{i j} \eta_{t \mid t-1}^{i j} \\
+    P_{t \mid t}^{i j} &amp; =\left(I-K^{i j} F\right) P_{t \mid t-1}^{i j} 
+\end{aligned}
+$$$$\Downarrow$$&lt;center&gt;Hamilton Filtering&lt;/center&gt;
+$$
+\begin{aligned}
+    &amp; f\left(y_t, S_{t-1}=i, S_t=j \mid \psi_{t-1}\right)=N\left(\eta_{t \mid t-1}^{i j}, H_{t \mid t-1}^{i j}\right) \times P_{i j} \times P\left(S_{t-1}=i \mid \psi_{t-1}\right) \\
+    &amp; f\left(y_t \mid \psi_{t-1}\right)=\sum_{j=1}^M \sum_{i=1}^M f\left(y_t, S_{t-1}=i, S_t=j \mid \psi_{t-1}\right) \\
+    &amp; P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]=\frac{f\left(y_t, S_{t-1}=i, S_t=j \mid \psi_{t-1}\right)}{f\left(y_t \mid \psi_{t-1}\right)} \\
+    &amp; P\left[S_t=j \mid \psi_t\right]=\sum_{i=1}^M P\left[S_{t-1}=i, S_t=j \mid \psi_t\right] \\
+\end{aligned}
+$$
+$$\Downarrow$$
+&lt;center&gt;Kim&#39;s Collapsing&lt;/center&gt;
+$$
+\begin{aligned}
+    x_{t \mid t}^j &amp; =\frac{\sum_{i=1}^M P\left[S_{t-1}=i, S_t=j \mid \psi_t\right] x_{t \mid t}^{i j}}{P\left[S_t=j \mid \psi_t\right]} \\
+    P_{t \mid t}^j &amp; =\frac{\sum_{i=1}^M P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]\left[P_{t \mid t}^{i j}+\left(x_{t \mid t}^j-x_{t \mid t}^{i j}\right)\left(x_{t \mid t}^j-x_{t \mid t}^{i j}\right)^T\right]}{P\left[S_t=j \mid \psi_t\right]}
+\end{aligned}
+$$
+&lt;p&gt;In particular, three red colored terms $\left(x_{t-1 \mid t-1}^i, P_{t-1 \mid t-1}^i\right.$, and $\left.P\left(S_{t-1}=i \mid \psi_{t-1}\right)\right)$ are initialized for iteration to be started. Once the iterations get started, these red colored terms are replaced with blue colored terms $\left(x_{t \mid t}^j, P_{t \mid t}^j\right.$, and $\left.P\left(S_t=j \mid \psi_t\right)\right)$ for each iterations.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Toy Notes of MCMC</title>
+      <link>http://localhost:1313/post/toy-mcmc/</link>
+      <pubDate>Thu, 12 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/post/toy-mcmc/</guid>
+      <description>
+
+
+&lt;details class=&#34;print:hidden xl:hidden&#34; open&gt;
+  &lt;summary&gt;Table of Contents&lt;/summary&gt;
+  &lt;div class=&#34;text-sm&#34;&gt;
+  &lt;nav id=&#34;TableOfContents&#34;&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href=&#34;#mh算法&#34;&gt;MH算法&lt;/a&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&#34;#mh算法基本步骤&#34;&gt;MH算法基本步骤&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&#34;#为什么这样能够工作&#34;&gt;为什么这样能够工作?&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/li&gt;
+    &lt;li&gt;&lt;a href=&#34;#note&#34;&gt;Note&lt;/a&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&#34;#为什么设置的是aleftx_t-xprimerightmin-left1-fracpleftxprimeright-qleftx_t-mid-xprimerightpleftx_tright-qleftxprime-mid-x_trightright&#34;&gt;为什么设置的是&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&#34;#为什么引入均匀分布&#34;&gt;为什么引入均匀分布？&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/li&gt;
+    &lt;li&gt;&lt;a href=&#34;#gibbs-sampling&#34;&gt;Gibbs sampling&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&#34;#example&#34;&gt;Example&lt;/a&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&#34;#ar1模型示例&#34;&gt;AR(1)模型示例&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/li&gt;
+    &lt;li&gt;&lt;a href=&#34;#r-code&#34;&gt;R code&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;h2 id=&#34;mh算法&#34;&gt;MH算法&lt;/h2&gt;
+&lt;h3 id=&#34;mh算法基本步骤&#34;&gt;MH算法基本步骤&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;初始化: 选择一个初始状态 $x_0$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对于每一步 $t=1,2, \ldots, T$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;建议步骤: 从建议分布 $q(x&#39; \mid x_t)$ 中抽取一个候选状态 $x&#39;$&lt;/li&gt;
+&lt;li&gt;接受步骤: 以以下的接受概率 $A(x_t, x&#39;)$ 接受候选状态:
+$$
+   A(x_t, x&#39;)=\min \left(1, \frac{p(x&#39;) q(x_t \mid x&#39;)}{p(x_t) q(x&#39; \mid x_t)}\right)
+   $$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;如果接受，则 $x_{t+1}=x&#39;$，否则 $x_{t+1}=x_t$.&lt;/p&gt;
+&lt;p&gt;这里， $p(x)$ 是我们想要采样的目标分布， $q(x&#39; \mid x_t)$ 是给定当前状态 $x_t$ 时，提议一个新状态 $x&#39;$ 的建议分布.&lt;/p&gt;
+&lt;h3 id=&#34;为什么这样能够工作&#34;&gt;为什么这样能够工作?&lt;/h3&gt;
+&lt;p&gt;关键在于保证马尔可夫链的平稳分布 (stationary distribution) 是我们要抽样的目标分布。 平稳分布 $\pi(x)$ 是一个分布，对其而言，如果我们从该分布中抽取一个样本并应用转移核，新 的样本仍然服从 $\pi(x)$ 。数学上我们可以表达为:
+&lt;/p&gt;
+$$
+\pi\left(x^{\prime}\right)=\sum_x \pi(x) P\left(x^{\prime} \mid x\right)
+$$&lt;p&gt;
+这里， $P\left(x^{\prime} \mid x\right)$ 是从状态 $x$ 到状态 $x^{\prime}$ 的转移概率。
+$\mathrm{MH}$ 算法通过精心设计的接受准则确保了其转移核满足{\color{brown} 细致平稳条件}，也就是说，对于任意的 状态 $x$ 和 $x^{\prime}$ ，以下等式成立:
+&lt;/p&gt;
+$$
+\pi(x) P\left(x^{\prime} \mid x\right)=\pi\left(x^{\prime}\right) P\left(x \mid x^{\prime}\right)
+$$&lt;p&gt;其中 $P\left(x^{\prime} \mid x\right)$ 是总的从状态 $x$ 到状态 $x^{\prime}$ 的转移概率，包括了提议和接受两个步骤，可以写 作:&lt;/p&gt;
+$$
+P\left(x^{\prime} \mid x\right)=q\left(x^{\prime} \mid x\right) A\left(x, x^{\prime}\right)
+$$&lt;p&gt;通过MH算法的接受准则，我们可以验证细致平稳条件确实成立:&lt;/p&gt;
+$$\pi(x) q\left(x^{\prime} \mid x\right) A\left(x, x^{\prime}\right)=\pi\left(x^{\prime}\right) q\left(x \mid x^{\prime}\right) A\left(x^{\prime}, x\right)$$&lt;p&gt;由于 $A\left(x, x^{\prime}\right)=\min \left(1, \frac{\pi\left(x^{\prime}\right) q\left(x \mid x^{\prime}\right)}{\pi(x) q\left(x^{\prime} \mid x\right)}\right)$和$A\left(x^{\prime}, x\right)=\min \left(1,\frac{\pi(x) q\left(x^{\prime} \mid x\right)}{\pi\left(x^{\prime}\right) q\left(x \mid x^{\prime}\right)}\right)$ ，我们可以看 到这两边确实是相等的，从而确保了平稳分布 $\pi(x)$ 就是我们要采样的分布 $p(x)$.&lt;/p&gt;
+&lt;h2 id=&#34;note&#34;&gt;Note&lt;/h2&gt;
+&lt;h3 id=&#34;为什么设置的是aleftx_t-xprimerightmin-left1-fracpleftxprimeright-qleftx_t-mid-xprimerightpleftx_tright-qleftxprime-mid-x_trightright&#34;&gt;为什么设置的是$A\left(x_t, x^{\prime}\right)=\min \left(1, \frac{p\left(x^{\prime}\right) q\left(x_t \mid x^{\prime}\right)}{p\left(x_t\right) q\left(x^{\prime} \mid x_t\right)}\right)$&lt;/h3&gt;
+&lt;p&gt;Metropolis-Hastings (MH) 算法中的接受概率
+&lt;/p&gt;
+$$
+A\left(x_t, x^{\prime}\right)=\min \left(1, \frac{p\left(x^{\prime}\right) q\left(x_t \mid x^{\prime}\right)}{p\left(x_t\right) q\left(x^{\prime} \mid x_t\right)}\right)
+$$&lt;p&gt;
+是一个精心设计的准则，旨在确保生成的样本 $x$ 的分布最终收敛到目标分布 $p(x)$ 。这里的 $x_t$ 是当前状态， $x^{\prime}$ 是建议的下一个状态， $q\left(x_t \mid x^{\prime}\right)$ 是从状态 $x^{\prime}$ 到状态 $x_t$ 的转移概率， $p(x)$ 是我们想要采样的分布。&lt;/p&gt;
+&lt;p&gt;理解这个接受概率的一个简单方法是考虑比率
+&lt;/p&gt;
+$$
+\frac{p\left(x^{\prime}\right) q\left(x_t \mid x^{\prime}\right)}{p\left(x_t\right) q\left(x^{\prime} \mid x_t\right)}
+$$&lt;p&gt;分子 $p\left(x^{\prime}\right) q\left(x_t \mid x^{\prime}\right)$ : 这部分表示我们建议从状态 $x^{\prime}$ 移动到 $x_t$ 并且 $x^{\prime}$ 本身的概率。实际 上，这部分衡量了建议的状态 $x^{\prime}$ 到当前状态 $x_t$ 的“前进”概率.&lt;/p&gt;
+&lt;p&gt;分母 $p\left(x_t\right) q\left(x^{\prime} \mid x_t\right)$ : 这部分表示我们建议从状态 $x_t$ 移动到状态 $x^{\prime}$ 并且 $x_t$ 本身的概率。这 部分衡量了当前状态 $x_t$ 到建议状态 $x^{\prime}$ 的“前进”概率.&lt;/p&gt;
+&lt;p&gt;这个比率的直观意义是一个“平衡”：我们想要平衡从当前状态到建议状态的前进概率和反方向 的前进概率。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当这个比率大于1时，我们总是接受建议的状态，因为这意味着建议的状态比当 前状态更可能来自目标分布.&lt;/li&gt;
+&lt;li&gt;当这个比率小于1时，我们只有一定的概率接受建议的状态，这个概率正比于比率的大小.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;为什么引入均匀分布&#34;&gt;为什么引入均匀分布？&lt;/h3&gt;
+&lt;p&gt;均匀分布在 $\mathrm{MH}$算法中的角色体现在决定是否接受建议状态的步骤. 具体来说，即使建议状态 的接受概率 $A\left(x_t, x^{\prime}\right)$ 小于1，我们仍然有可能接受它，这样做可以防止算法过早地陷入局部 最优解并增加探索性。我们通常通过以下方式使用均匀分布:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;从均匀分布 $U(0,1)$ 中抽取一个随机数 $u$.&lt;/li&gt;
+&lt;li&gt;如果 $u \leq A\left(x_t, x^{\prime}\right)$ ， 接受建议状态，否则保持当前状态不变.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;使用均匀分布的这一步增加了算法的随机性，并允许它有可能接受一个在目标分布下不太可 能的状态，从而增加了算法的探索能力.&lt;/p&gt;
+&lt;h2 id=&#34;gibbs-sampling&#34;&gt;Gibbs sampling&lt;/h2&gt;
+&lt;p&gt;Gibbs抽样是一种特殊的Metropolis-Hastings（MH）算法，其中提议分布是条件分布，而接受概率始终为1. 这意味着Gibbs抽样总是接受新提议的样本.&lt;/p&gt;
+&lt;p&gt;Gibbs抽样是一种在高维分布上进行抽样的方法。对于一个 $d$ 维分布 $p\left(x_1, x_2, \ldots, x_d\right)$ ， Gibbs抽样在每一步依次对每一个变量 $x_i$ 进行抽样，条件于其他所有变量的当前值:
+&lt;/p&gt;
+$$
+x_i^{(t+1)} \sim p\left(x_i \mid x_1^{(t+1)}, x_2^{(t+1)}, \ldots, x_{i-1}^{(t+1)}, x_{i+1}^{(t)}, \ldots, x_d^{(t)}\right),
+$$&lt;p&gt;
+这里， $(t)$ 是迭代的步数.&lt;/p&gt;
+&lt;p&gt;Gibbs抽样作为MH算法的特例:&lt;/p&gt;
+&lt;p&gt;为了理解Gibbs抽样是如何成为 $\mathrm{MH}$ 算法的一个特例的，我们需要考虑 $\mathrm{MH}$ 算法的两个主要步骤: 建议 (proposal) 和接受 (acceptance).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在MH算法中:
+&lt;ol&gt;
+&lt;li&gt;建议步骤: 从建议分布 $q\left(x^{\prime} \mid x\right)$ 中抽样一个候选样本.&lt;/li&gt;
+&lt;li&gt;接受步骤: 以一定的接受概率 $A\left(x, x^{\prime}\right)$ 接受这个样本.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;在Gibbs抽样中:
+&lt;ol&gt;
+&lt;li&gt;建议步骤: 从完全条件分布中抽样.&lt;/li&gt;
+&lt;li&gt;接受步骤: 总是接受从条件分布中抽样出的样本.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果我们将Gibbs抽样的建议步骤视为 $\mathrm{MH}$ 算法中的一个特殊情况，其中建议分布是条件分 布，那么Gibbs抽样的接受概率可以计算为:
+&lt;/p&gt;
+$$
+A\left(x, x^{\prime}\right)=\min \left(1, \frac{p\left(x^{\prime}\right) q\left(x \mid x^{\prime}\right)}{p(x) q\left(x^{\prime} \mid x\right)}\right)
+$$&lt;p&gt;
+由于在Gibbs抽样中 $q\left(x^{\prime} \mid x\right)=p\left(x_i^{\prime} \mid x_{-i}\right)$ ，其中 $x_{-i}$ 表示除了 $x_i$ 之外的所有变量，我们可 以得出:
+&lt;/p&gt;
+$$
+A\left(x, x^{\prime}\right)=\min \left(1, \frac{p\left(x_i^{\prime} \mid x_{-i}^{\prime}\right) p\left(x_{-i}^{\prime}\right)}{p\left(x_i \mid x_{-i}\right) p\left(x_{-i}\right)}\right)
+$$&lt;p&gt;
+由于 $x_{-i}^{\prime}=x_{-i}$ ，我们可以简化这个比例为:
+&lt;/p&gt;
+$$
+A\left(x, x^{\prime}\right)=\min \left(1, \frac{p\left(x_i^{\prime} \mid x_{-i}\right)}{p\left(x_i \mid x_{-i}\right)}\right)
+$$&lt;p&gt;
+但是由于 $x_i^{\prime}$ 是直接从分布 $p\left(x_i^{\prime} \mid x_{-i}\right)$ 中抽样出来的，我们知道这个比例总是等于1，因此接受概率总是1.&lt;/p&gt;
+&lt;p&gt;这就解释了为什么说Gibbs抽样是MH算法的一个特例: Gibbs抽样总是接受新抽样出的样本，因此它可以被看作是MH算法中建议分布总是等于条件分布，接受概率总是 1 的一个特殊情况.&lt;/p&gt;
+&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
+&lt;h3 id=&#34;ar1模型示例&#34;&gt;AR(1)模型示例&lt;/h3&gt;
+&lt;p&gt;考虑一个AR(1)模型:
+&lt;/p&gt;
+\[ y_t = \phi y_{t-1} + \epsilon_t \]&lt;p&gt;
+其中 \( \epsilon_t \sim N(0, \sigma^2) \)。&lt;/p&gt;
+&lt;p&gt;我们的目标: 给定观测值 \( y_1, y_2, ... y_n \)，使用MCMC估计 \( \phi \)。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;基于AR(1)模型定义似然函数 \( p(y|\phi) \)。&lt;/li&gt;
+&lt;li&gt;为 \( \phi \) 定义一个先验 \( p(\phi) \)。&lt;/li&gt;
+&lt;li&gt;结合似然和先验得到后验 \( p(\phi|y) \)。&lt;/li&gt;
+&lt;li&gt;使用Metropolis-Hastings算法（一种MCMC形式）从后验中抽取样本.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;r-code&#34;&gt;R code&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-R&#34; data-lang=&#34;R&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Simulate some data&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;set.seed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;123&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;100&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;phi_true&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;0.5&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;sigma_true&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;arima.sim&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ar&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;phi_true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;order&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sd&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sigma_true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;plot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;l&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Initialize parameters for Gibbs sampler&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;niter&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;10000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;phi_samples&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;numeric&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;niter&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;sigma2_samples&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;numeric&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;niter&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;phi_samples[1]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;# starting value for phi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;sigma2_samples[1]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;# starting value for sigma^2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;s2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;10&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;# variance for phi prior&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;alpha&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;0.01&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;beta&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;0.01&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kr&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;niter&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;# Update phi using Metropolis-Hastings&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;phi_candidate&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;rnorm&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;phi_samples[i&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;-1&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;0.1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;acceptance_ratio&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;exp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;dnorm&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;y[&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;-1&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mean&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;phi_candidate&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;y[&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n]&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sd&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;sqrt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sigma2_samples[i&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;-1&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;TRUE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;dnorm&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;phi_candidate&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;sqrt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;s2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;TRUE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;dnorm&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;y[&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;-1&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mean&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;phi_samples[i&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;-1&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;y[&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n]&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sd&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;sqrt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sigma2_samples[i&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;-1&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;TRUE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;dnorm&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;phi_samples[i&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;-1&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;sqrt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;s2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;TRUE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;kr&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;runif&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;acceptance_ratio&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;n&#34;&gt;phi_samples[i]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;phi_candidate&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;n&#34;&gt;phi_samples[i]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;phi_samples[i&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;-1&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;# Update sigma^2 using inverse gamma distribution&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;residuals&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y[&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;-1&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;phi_samples[i]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y[&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;alpha_star&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;alpha&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;beta_star&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;beta&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;0.5&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;residuals^2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;sigma2_samples[i]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;rgamma&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;alpha_star&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;beta_star&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;mean&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;phi_samples[2000&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;niter]&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;mean&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sigma2_samples[2000&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;niter]&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Plot results&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;plot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;phi_samples&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;l&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;plot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sigma2_samples&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;l&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;img src=&#34;phi_plot.jpeg&#34; alt=&#34;Sigma_plot&#34; style=&#34;zoom:50%;&#34; /&gt;
+&lt;img src=&#34;Sigma_plot.jpeg&#34; alt=&#34;Sigma_plot&#34; style=&#34;zoom:50%;&#34; /&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Hamilton Regime Switching Model</title>
+      <link>http://localhost:1313/post/hamilton-filter/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/post/hamilton-filter/</guid>
+      <description>&lt;h2 id=&#34;hamilton-regime-switching-model&#34;&gt;Hamilton Regime Switching Model&lt;/h2&gt;
+&lt;h3 id=&#34;regime-switching-model&#34;&gt;Regime Switching model&lt;/h3&gt;
+&lt;p&gt;Hamilton (1989) presents the regime switching model, which is so influential and is one of the main reference paper of so many academic papers. Let $s_t=0,1,2, \ldots, k$ denotes the state variable with $k$ regimes. In case of a two-state regime switching model, $s_t=0$ and $s_t=1$ can be interpreted as the expansion and recession states at time $t$. A $k$-state regime switching linear regression model has the following form.
+&lt;/p&gt;
+$$
+\begin{array}{rlrl}
+    y_t=c_{s_t}+\beta_{s_t} x_t+\epsilon_{s_t, t}, &amp; &amp; \epsilon_{s_t, t} &amp; \sim N\left(0, \sigma_{s_t}\right) \\
+    &amp; \Downarrow &amp; &amp; \\
+    y_t=c_1+\beta_1 x_t+\epsilon_{1, t}, &amp; &amp; \epsilon_{1, t} \sim N\left(0, \sigma_1\right) \\
+    y_t=c_2+\beta_2 x_t+\epsilon_{2, t}, &amp; &amp; \epsilon_{2, t} \sim N\left(0, \sigma_2\right) \\
+    \cdots &amp; &amp; \\
+    y_t=c_k+\beta_k x_t+\epsilon_{k, t}, &amp; &amp; \epsilon_{k, t} \sim N\left(0, \sigma_k\right)
+\end{array}
+$$&lt;p&gt;
+Since $s_t$ can take on $0,1, \ldots, k$, a transition probability matrix is introduced to describe their transitions.&lt;/p&gt;
+&lt;h3 id=&#34;markov-transition-probability-matrix&#34;&gt;Markov Transition Probability Matrix&lt;/h3&gt;
+&lt;p&gt;Each period, the regime or state follows Markov transition probability matrix. Markov means that transition probability depends on not long history of state transitions but only one lag. As examples, two- or three-state transition probability matrix are of the following forms.
+two-state
+&lt;/p&gt;
+$$
+P\left(s_t=j \mid s_{t-1}=i\right)=P_{i j}=\left[\begin{array}{ll}
+    p_{00} &amp; p_{01} \\
+    p_{10} &amp; p_{11}
+\end{array}\right]
+$$&lt;p&gt;
+three-state
+&lt;/p&gt;
+$$
+P\left(s_t=j \mid s_{t-1}=i\right)=P_{i j}=\left[\begin{array}{lll}
+    p_{00} &amp; p_{01} &amp; p_{02} \\
+    p_{10} &amp; p_{11} &amp; p_{12} \\
+    p_{20} &amp; p_{21} &amp; p_{22}
+\end{array}\right]
+$$&lt;p&gt;
+where $p_{i j}$ is the probability of transitioning from regime $i$ at time $t-1$ to regime $j$ at time $t$.&lt;/p&gt;
+&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
+&lt;p&gt;A two-state regime switching linear regression model and a transition probability matrix are of the following forms.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    &amp; y_t=c_{s_t}+\beta_{s_t} x_t+\epsilon_{s_t, t}, \quad \epsilon_{s_t, t} \sim N\left(0, \sigma_{s_t}^2\right) \\
+    &amp; P\left(s_t=j \mid s_{t-1}=i\right)=P_{i j}=\left[\begin{array}{ll}
+        p_{00} &amp; p_{01} \\
+        p_{10} &amp; p_{11}
+    \end{array}\right]
+\end{aligned}
+$$&lt;p&gt;
+Here $s_t$ can take on 0 or 1 and $p_{i j}$ is the probability of transitioning from regime $i$ at time $t-1$ to regime $j$ at time $t$.&lt;/p&gt;
+&lt;h3 id=&#34;hamilton-filtering&#34;&gt;Hamilton Filtering&lt;/h3&gt;
+&lt;p&gt;Hamilton filter is of the following sequence as we presented it in the previous post.&lt;/p&gt;
+&lt;p&gt;1.$t-1$ state (previous state)&lt;/p&gt;
+$$
+\xi_{i, t-1}=P\left(s_{t-1}=i \mid \bar{y}_{t-1} ; \theta\right)
+$$&lt;p&gt;2.state transition from $i$ to $j$ (state propagation) &lt;/p&gt;
+$$p_{i j}$$&lt;p&gt;3.densities under the two regimes at $t$ (data observations and state dependent errors)&lt;/p&gt;
+$$
+\eta_{j t}=\frac{1}{\sqrt{2 \pi} \sigma} \exp \left[-\frac{\left(y_t-c_j-\beta_j x_t\right)^2}{2 \sigma_j^2}\right]
+$$&lt;p&gt;4.conditional density of the time $t$ observation (combined likelihood with state being collapsed):&lt;/p&gt;
+$$
+\begin{aligned}
+    f\left(y_t \mid \tilde{y}_{t-1} ; \theta\right) &amp; =\xi_{0, t-1} p_{00} \eta_{0 t}+\xi_{0, t-1} p_{01} \eta_{1 t} \\
+    &amp; +\xi_{1, t-1} p_{10} \eta_{0 t}+\xi_{1, t-1} p_{11} \eta_{1 t}
+\end{aligned}
+$$&lt;p&gt;5.$t$ posterior state (corrected from previous state)&lt;/p&gt;
+$$
+\xi_{j t}=\frac{\sum_{i=0}^1 \xi_{i, t-1} p_{i j} \eta_{j t}}{f\left(y_t \mid \bar{y}_{t-1} ; \theta\right)}
+$$&lt;p&gt;6.use posterior state at time $t$ as previous state a time $t+1$ (substitution)&lt;/p&gt;
+$$
+\xi_{j t} \rightarrow \xi_{i, t-1}
+$$&lt;p&gt;7.iterate 1 $\sim$ 6 from $t=1$ to $T$
+As a result of executing this iteration, the sample conditional log likelihood of the observed data can be calculated in the following way.&lt;/p&gt;
+$$
+\log f\left(\bar{y}_t \mid y_0 ; \theta\right)=\sum_{t=1}^T f\left(y_t \mid \bar{y}_{t-1} ; \theta\right)
+$$&lt;p&gt;
+With this log-likelihood function, we use a numerical optimization to find the best fitting parameter set $(\bar{\theta})$.&lt;/p&gt;
+&lt;h3 id=&#34;numerical-optimization&#34;&gt;Numerical Optimization&lt;/h3&gt;
+&lt;p&gt;To start iterations of the Hamilton filter, we need to set $\xi_{i, 0}$ and in most cases the unconditional state probabilities are used.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    &amp; \xi_{0,0}=\frac{1-p_{11}}{2-p_{00}-p_{11}} \\
+    &amp; \xi_{1,0}=1-\xi_{0,0}
+\end{aligned}
+$$</description>
+    </item>
+    
+  </channel>
+</rss>

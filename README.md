@@ -1,3 +1,1 @@
-# [My Résumé](https://github.com/HugoBlox/theme-resume)
-
-Hello, welcome to my Résumé!
+# [My Academic CV Theme](https://github.com/HugoBlox/theme-academic-cv)

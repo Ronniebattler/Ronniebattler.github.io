@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Markdown | Hugo Academic CV Theme</title>
+    <link>http://localhost:1313/tags/markdown/</link>
+      <atom:link href="http://localhost:1313/tags/markdown/index.xml" rel="self" type="application/rss+xml" />
+    <description>Markdown</description>
+    <generator>Hugo Blox Builder (https://hugoblox.com)</generator><language>en-us</language><lastBuildDate>Fri, 27 Oct 2023 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>http://localhost:1313/media/icon_hu7729264130191091259.png</url>
+      <title>Markdown</title>
+      <link>http://localhost:1313/tags/markdown/</link>
+    </image>
+    
+    <item>
+      <title>Example of Regime Switching State Space Model</title>
+      <link>http://localhost:1313/post/kim-filter/</link>
+      <pubDate>Fri, 27 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/post/kim-filter/</guid>
+      <description>
+
+
+&lt;details class=&#34;print:hidden xl:hidden&#34; open&gt;
+  &lt;summary&gt;Table of Contents&lt;/summary&gt;
+  &lt;div class=&#34;text-sm&#34;&gt;
+  &lt;nav id=&#34;TableOfContents&#34;&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href=&#34;#regime-switching-state-space-model&#34;&gt;Regime Switching State Space Model&lt;/a&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&#34;#model-description&#34;&gt;Model Description&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&#34;#kalman-filtering&#34;&gt;Kalman Filtering&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/li&gt;
+    &lt;li&gt;&lt;a href=&#34;#kim1994s-collapsing-procedure&#34;&gt;Kim(1994)’s Collapsing procedure&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&#34;#kim-1994-filter-for-regime-switching-state-space-model&#34;&gt;Kim (1994) Filter for Regime Switching State Space model&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;h2 id=&#34;regime-switching-state-space-model&#34;&gt;Regime Switching State Space Model&lt;/h2&gt;
+&lt;h3 id=&#34;model-description&#34;&gt;Model Description&lt;/h3&gt;
+&lt;p&gt;As an example of a regime switching state space model, Prof. Kim used the following generalized Hamilton model for the log of real GNP (Lam; 1990) in his paper and book.&lt;/p&gt;
+$$
+\begin{aligned}
+    \ln \left(G N P_t\right) &amp; =n_t+x_t \\
+    n_t &amp; =n_{t-1}+\mu_0+\mu_1 s_t \\
+    x_t &amp; =\phi_1 x_{t-1}+\phi_2 x_{t-2}+u_t \\
+    u_t &amp; \sim N\left(0, \sigma^2\right) \\
+    s_t &amp; =0,1 \quad P_{t j}=\left[\begin{array}{ll}
+        p_{00} &amp; p_{01} \\
+        p_{10} &amp; p_{11}
+    \end{array}\right]
+\end{aligned}
+$$&lt;p&gt;where $\ln \left(G N P_t\right)$ is a real GNP level. $n_t$ is a deterministic series with a regimeswitching growth rate and $x_t$ is stationary AR(2) cycle process.&lt;/p&gt;
+&lt;p&gt;Since $\ln \left(G N P_t\right)$ is the log level variable, the difference of it, $y_t=\ln \left(G N P_t\right)-\ln \left(G N P_{t-1}\right)$, can be represented as a state space model in the following way.&lt;/p&gt;
+$$\begin{aligned}
+    &amp; y_t=\mu_0+\mu_1 s_t+x_t-x_{t-1} \\
+    &amp; x_t=\phi_1 x_{t-1}+\phi_2 x_{t-2}+u_t
+\end{aligned}
+$$&lt;p&gt;
+It is a typical approach that a state space model is represented as a vector-matrix form for using Kalman filter as follows.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    y_t &amp; =\mu_{s_t}+\left[\begin{array}{ll}
+        1 &amp; -1
+    \end{array}\right]\left[\begin{array}{c}
+        x_t \\
+        x_{t-1}
+    \end{array}\right] \\
+    {\left[\begin{array}{c}
+            x_t \\
+            x_{t-1}
+        \end{array}\right] } &amp; =\left[\begin{array}{cc}
+        \phi_1 &amp; \phi_2 \\
+        1 &amp; 0
+    \end{array}\right]\left[\begin{array}{c}
+        x_{t-1} \\
+        x_{t-2}
+    \end{array}\right]+\left[\begin{array}{c}
+        u_t \\
+        0
+    \end{array}\right] \\
+    u_t &amp; \sim N\left(0, \sigma^2\right) \\
+    \mu_{s_t} &amp; =\mu_0+\mu_1 s_t, \quad \mu_1&gt;0 \\
+    s_t &amp; =0,1 \quad P_{t j}=\left[\begin{array}{ll}
+        p_{00} &amp; p_{01} \\
+        p_{10} &amp; p_{11}
+    \end{array}\right] \\
+    \Downarrow &amp; \\
+    y_t &amp; =\mu_{s_t}+F \mathbf{x}_t \\
+    \mathbf{x}_t &amp; =A \mathbf{x}_{t-1}+v_t
+\end{aligned}$$&lt;p&gt;For the sake of notational simplicity, we use $x_t$ instead of $\mathbf{x}_t$.&lt;/p&gt;
+&lt;h3 id=&#34;kalman-filtering&#34;&gt;Kalman Filtering&lt;/h3&gt;
+&lt;p&gt;Kalman filter with regime switching is used to get state estimates from a state space model taking regime transition into account and has the following recursion.&lt;/p&gt;
+$$
+\begin{aligned}
+    x_{t \mid t-1}^{i j} &amp; =A x_{t-1 \mid t-1}^i \\
+    P_{t \mid t-1}^{i j} &amp; =A P_{t-1 \mid t-1}^i A^T+Q \\
+    \eta_{t \mid t-1}^{i j} &amp; =y_t-\mu_j-F x_{t \mid t-1}^{i j} \\
+    H_{t \mid t-1}^{i j} &amp; =F P_{t \mid t-1}^{i j} F^T+R \\
+    K^{i j} &amp; =P_{t \mid t-1}^{i j} F^T\left[H_{t \mid t-1}^{i j}\right]^{-1} \\
+    x_{t \mid t}^{i j} &amp; =x_{t \mid t-1}^{i j}+K^{i j} \eta_{t \mid t-1}^{i j} \\
+    P_{t \mid t}^{i j} &amp; =\left(I-K^{i j} F\right) P_{t \mid t-1}^{i j}
+\end{aligned}
+$$&lt;p&gt;
+In regime-dependent Kalman filter, all the notations are augmented with superscript $\{i j\}$ except $x_{t-1 \mid t-1}^i$ and $P_{t-1 \mid t-1}^i$ since these two estimates are in i-state (two-state) but other estimates must reflect state transitions from i to $\mathrm{j}$ (four-state). For example, $x_{t \mid t-1}$ and $x_{t \mid t-1}^{i j}$ are different in terms of conditioning information.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    x_{t \mid t-1} &amp; =E\left[X_t \mid \psi_{t-1}\right] \\
+    x_{t \mid t-1}^{i j} &amp; =E\left[X_t \mid \psi_{t-1}, S_t=j, S_{t-1}=i\right]
+\end{aligned}
+$$&lt;p&gt;
+In contrast to the single regime, however, in the multiple regimes, $x_{t \mid t}^{i j}$ and $P_{t \mid t}^{i j}$ cannot be used the next state prediction due simply to the mismatch both 1) between $x_{t \mid t}^{i j}$ and $x_{t-1 \mid t-1}^i$ and 2) between $P_{t \mid t}^{i j}$ and $P_{t-1 \mid t-1}^i$. To resolve this mismatch problem, Kim (1994) developed a dimension collapsing algorithm.&lt;/p&gt;
+&lt;h2 id=&#34;kim1994s-collapsing-procedure&#34;&gt;Kim(1994)’s Collapsing procedure&lt;/h2&gt;
+&lt;p&gt;Kim (1994) introduces a collapsing procedure (approximation) to reduce the $(M \times M)$ posteriors $\left(x_{t \mid t}^{i j}\right.$ and $P_{t \mid t}^{i j}$ ) into $M$ to complete the above Kalman filter recursion.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    x_{t \mid t}^j &amp; =\frac{\sum_{i=1}^M P\left[S_{t-1}=i, S_t=j \mid \psi_t\right] x_{t \mid t}^{i j}}{P\left[S_t=j \mid \psi_t\right]} \\
+    P_{t \mid t}^j &amp; =\frac{\sum_{i=1}^M P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]\left[P_{t \mid t}^{i j}+\left(x_{t \mid t}^j-x_{t \mid t}^{i j}\right)\left(x_{t \mid t}^j-x_{t \mid t}^{i j}\right)^T\right]}{P\left[S_t=j \mid \psi_t\right]}
+\end{aligned}
+$$&lt;p&gt;
+To calculate the above approximation, when we calculate $P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]$, $P\left[S_t=j \mid \psi_t\right]$ is easily obtained by summing its $\mathrm{M}$ branches from each i states.
+&lt;/p&gt;
+$$
+P\left[S_t=j \mid \psi_t\right]=\sum_{i=1}^M P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]
+$$&lt;p&gt;
+Knowing $P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]$ means that we observe time t data since the last time of information set is $t$ and the state is migrated from $i$ to $j$. For this data information into account, we can think of the marginal probability of state transition by integrating out data.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    &amp; P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]=\frac{f\left(y_t, S_{t-1}=i, S_t=j \mid \psi_{t-1}\right)}{f\left(y_t \mid \psi_{t-1}\right)} \\
+    &amp; f\left(y_t \mid \psi_{t-1}\right)=\sum_{j=1}^M \sum_{i=1}^M f\left(y_t, S_{t-1}=i, S_t=j \mid \psi_{t-1}\right)
+\end{aligned}
+$$&lt;p&gt;
+As can be seen from the above equations, when we know $f\left(y_t, S_{t-1}=i, S_t=j \mid \psi_{t-1}\right)$ which is the joint density of data and two states, $P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]$ and $f\left(y_t \mid \psi_{t-1}\right)$ are easily obtained. We get the following the joint density.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    &amp; f\left(y_t, S_{t-1}=i, S_t=j \mid \psi_{t-1}\right) \\
+    &amp; =f\left(y_t \mid S_{t-1}=i, S_t=j, \psi_{t-1}\right) \times P\left(S_{t-1}=i, S_t=j \mid \psi_{t-1}\right)
+\end{aligned}
+$$&lt;p&gt;
+Now we need to know two parts. The first part is the forecast error given data. (MVN : probability density function of multivariate normal distribution with zero mean and forecast error variance)
+&lt;/p&gt;
+$$
+\begin{aligned}
+    &amp; f\left(y_t \mid S_{t-1}=i, S_t=j, \psi_{t-1}\right) \\
+    &amp; =M V N \text { (forecast error, its variance) }
+\end{aligned}
+$$&lt;p&gt;
+The second part is calculated by the multiplication of the transition probability and the summation of its branches.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    &amp; P\left(S_{t-1}=i, S_t=j \mid \psi_{t-1}\right) \\
+    &amp; =P\left[S_t=j \mid S_{t-1}=i\right] \times \sum_{k=1}^M f\left(S_{t-2}=k, S_{t-1}=i \mid \psi_{t-1}\right) \\
+    &amp; =P_{i j} \times f\left(S_{t-1}=i \mid \psi_{t-1}\right)
+\end{aligned}
+$$&lt;p&gt;
+In the above equation, as we know, $P_{i j}$ is already known as transition probability matrix and $f\left(S_{t-2}=k, S_{t-1}=i \mid \psi_{t-1}\right)$ is exactly what we want to find but evaluated at the previous t- 1 time. Therefore for the iteration, $f\left(S_{-1}=k, S_0=i \mid \psi_0\right)$ calls for initialization with the steady state probabilities.
+Therefore, we can calculate $P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]$ and $P\left[S_t=j \mid \psi_t\right]$ through the above equations.&lt;/p&gt;
+&lt;h2 id=&#34;kim-1994-filter-for-regime-switching-state-space-model&#34;&gt;Kim (1994) Filter for Regime Switching State Space model&lt;/h2&gt;
+&lt;p&gt;Kim filtering procedure is summarized in a sequence of equations.
+Kalman Filtering
+&lt;/p&gt;
+$$
+\begin{aligned}
+    x_{t \mid t-1}^{i j} &amp; =A x_{t-1 \mid t-1}^i \\
+    P_{t \mid t-1}^{i j} &amp; =A P_{t-1 \mid t-1}^i A^T+Q \\
+    \eta_{t \mid t-1}^{i j} &amp; =y_t-\mu_j-F x_{t \mid t-1}^{i j} \\
+    H_{t \mid t-1}^{i j} &amp; =F P_{t \mid t-1}^{i j} F^T+R \\
+    K^{i j} &amp; =P_{t \mid t-1}^{i j} F^T\left[H_{t \mid t-1}^{i j}\right]^{-1} \\
+    x_{t \mid t}^{i j} &amp; =x_{t \mid t-1}^{i j}+K^{i j} \eta_{t \mid t-1}^{i j} \\
+    P_{t \mid t}^{i j} &amp; =\left(I-K^{i j} F\right) P_{t \mid t-1}^{i j} 
+\end{aligned}
+$$$$\Downarrow$$&lt;center&gt;Hamilton Filtering&lt;/center&gt;
+$$
+\begin{aligned}
+    &amp; f\left(y_t, S_{t-1}=i, S_t=j \mid \psi_{t-1}\right)=N\left(\eta_{t \mid t-1}^{i j}, H_{t \mid t-1}^{i j}\right) \times P_{i j} \times P\left(S_{t-1}=i \mid \psi_{t-1}\right) \\
+    &amp; f\left(y_t \mid \psi_{t-1}\right)=\sum_{j=1}^M \sum_{i=1}^M f\left(y_t, S_{t-1}=i, S_t=j \mid \psi_{t-1}\right) \\
+    &amp; P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]=\frac{f\left(y_t, S_{t-1}=i, S_t=j \mid \psi_{t-1}\right)}{f\left(y_t \mid \psi_{t-1}\right)} \\
+    &amp; P\left[S_t=j \mid \psi_t\right]=\sum_{i=1}^M P\left[S_{t-1}=i, S_t=j \mid \psi_t\right] \\
+\end{aligned}
+$$
+$$\Downarrow$$
+&lt;center&gt;Kim&#39;s Collapsing&lt;/center&gt;
+$$
+\begin{aligned}
+    x_{t \mid t}^j &amp; =\frac{\sum_{i=1}^M P\left[S_{t-1}=i, S_t=j \mid \psi_t\right] x_{t \mid t}^{i j}}{P\left[S_t=j \mid \psi_t\right]} \\
+    P_{t \mid t}^j &amp; =\frac{\sum_{i=1}^M P\left[S_{t-1}=i, S_t=j \mid \psi_t\right]\left[P_{t \mid t}^{i j}+\left(x_{t \mid t}^j-x_{t \mid t}^{i j}\right)\left(x_{t \mid t}^j-x_{t \mid t}^{i j}\right)^T\right]}{P\left[S_t=j \mid \psi_t\right]}
+\end{aligned}
+$$
+&lt;p&gt;In particular, three red colored terms $\left(x_{t-1 \mid t-1}^i, P_{t-1 \mid t-1}^i\right.$, and $\left.P\left(S_{t-1}=i \mid \psi_{t-1}\right)\right)$ are initialized for iteration to be started. Once the iterations get started, these red colored terms are replaced with blue colored terms $\left(x_{t \mid t}^j, P_{t \mid t}^j\right.$, and $\left.P\left(S_t=j \mid \psi_t\right)\right)$ for each iterations.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Pandas</title>
+      <link>http://localhost:1313/project/pandas/</link>
+      <pubDate>Thu, 26 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/project/pandas/</guid>
+      <description>&lt;p&gt;Flexible and powerful data analysis / manipulation library for Python, providing labeled data structures.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>PyTorch</title>
+      <link>http://localhost:1313/project/pytorch/</link>
+      <pubDate>Thu, 26 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/project/pytorch/</guid>
+      <description>&lt;p&gt;PyTorch is a Python package that provides tensor computation (like NumPy) with strong GPU acceleration.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>scikit-learn</title>
+      <link>http://localhost:1313/project/scikit/</link>
+      <pubDate>Thu, 26 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/project/scikit/</guid>
+      <description>&lt;p&gt;scikit-learn is a Python module for machine learning built on top of SciPy and is distributed under the 3-Clause BSD license.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Toy Notes of MCMC</title>
+      <link>http://localhost:1313/post/toy-mcmc/</link>
+      <pubDate>Thu, 12 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/post/toy-mcmc/</guid>
+      <description>
+
+
+&lt;details class=&#34;print:hidden xl:hidden&#34; open&gt;
+  &lt;summary&gt;Table of Contents&lt;/summary&gt;
+  &lt;div class=&#34;text-sm&#34;&gt;
+  &lt;nav id=&#34;TableOfContents&#34;&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href=&#34;#mh算法&#34;&gt;MH算法&lt;/a&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&#34;#mh算法基本步骤&#34;&gt;MH算法基本步骤&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&#34;#为什么这样能够工作&#34;&gt;为什么这样能够工作?&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/li&gt;
+    &lt;li&gt;&lt;a href=&#34;#note&#34;&gt;Note&lt;/a&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&#34;#为什么设置的是aleftx_t-xprimerightmin-left1-fracpleftxprimeright-qleftx_t-mid-xprimerightpleftx_tright-qleftxprime-mid-x_trightright&#34;&gt;为什么设置的是&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+  &lt;/div&gt;
+&lt;/details&gt;
+
+&lt;h2 id=&#34;mh算法&#34;&gt;MH算法&lt;/h2&gt;
+&lt;h3 id=&#34;mh算法基本步骤&#34;&gt;MH算法基本步骤&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;初始化: 选择一个初始状态 $x_0$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对于每一步 $t=1,2, \ldots, T$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;建议步骤: 从建议分布 $q(x&#39; \mid x_t)$ 中抽取一个候选状态 $x&#39;$&lt;/li&gt;
+&lt;li&gt;接受步骤: 以以下的接受概率 $A(x_t, x&#39;)$ 接受候选状态:
+$$
+   A(x_t, x&#39;)=\min \left(1, \frac{p(x&#39;) q(x_t \mid x&#39;)}{p(x_t) q(x&#39; \mid x_t)}\right)
+   $$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;如果接受，则 $x_{t+1}=x&#39;$，否则 $x_{t+1}=x_t$.&lt;/p&gt;
+&lt;p&gt;这里， $p(x)$ 是我们想要采样的目标分布， $q(x&#39; \mid x_t)$ 是给定当前状态 $x_t$ 时，提议一个新状态 $x&#39;$ 的建议分布.&lt;/p&gt;
+&lt;h3 id=&#34;为什么这样能够工作&#34;&gt;为什么这样能够工作?&lt;/h3&gt;
+&lt;p&gt;关键在于保证马尔可夫链的平稳分布 (stationary distribution) 是我们要抽样的目标分布。 平稳分布 $\pi(x)$ 是一个分布，对其而言，如果我们从该分布中抽取一个样本并应用转移核，新 的样本仍然服从 $\pi(x)$ 。数学上我们可以表达为:
+&lt;/p&gt;
+$$
+\pi\left(x^{\prime}\right)=\sum_x \pi(x) P\left(x^{\prime} \mid x\right)
+$$&lt;p&gt;
+这里， $P\left(x^{\prime} \mid x\right)$ 是从状态 $x$ 到状态 $x^{\prime}$ 的转移概率。
+$\mathrm{MH}$ 算法通过精心设计的接受准则确保了其转移核满足{\color{brown} 细致平稳条件}，也就是说，对于任意的 状态 $x$ 和 $x^{\prime}$ ，以下等式成立:
+&lt;/p&gt;
+$$
+\pi(x) P\left(x^{\prime} \mid x\right)=\pi\left(x^{\prime}\right) P\left(x \mid x^{\prime}\right)
+$$&lt;p&gt;其中 $P\left(x^{\prime} \mid x\right)$ 是总的从状态 $x$ 到状态 $x^{\prime}$ 的转移概率，包括了提议和接受两个步骤，可以写 作:&lt;/p&gt;
+$$
+P\left(x^{\prime} \mid x\right)=q\left(x^{\prime} \mid x\right) A\left(x, x^{\prime}\right)
+$$&lt;p&gt;通过MH算法的接受准则，我们可以验证细致平稳条件确实成立:&lt;/p&gt;
+$$\pi(x) q\left(x^{\prime} \mid x\right) A\left(x, x^{\prime}\right)=\pi\left(x^{\prime}\right) q\left(x \mid x^{\prime}\right) A\left(x^{\prime}, x\right)$$&lt;p&gt;由于 $A\left(x, x^{\prime}\right)=\min \left(1, \frac{\pi\left(x^{\prime}\right) q\left(x \mid x^{\prime}\right)}{\pi(x) q\left(x^{\prime} \mid x\right)}\right)$和$A\left(x^{\prime}, x\right)=\min \left(1,\frac{\pi(x) q\left(x^{\prime} \mid x\right)}{\pi\left(x^{\prime}\right) q\left(x \mid x^{\prime}\right)}\right)$ ，我们可以看 到这两边确实是相等的，从而确保了平稳分布 $\pi(x)$ 就是我们要采样的分布 $p(x)$.&lt;/p&gt;
+&lt;h2 id=&#34;note&#34;&gt;Note&lt;/h2&gt;
+&lt;h3 id=&#34;为什么设置的是aleftx_t-xprimerightmin-left1-fracpleftxprimeright-qleftx_t-mid-xprimerightpleftx_tright-qleftxprime-mid-x_trightright&#34;&gt;为什么设置的是$A\left(x_t, x^{\prime}\right)=\min \left(1, \frac{p\left(x^{\prime}\right) q\left(x_t \mid x^{\prime}\right)}{p\left(x_t\right) q\left(x^{\prime} \mid x_t\right)}\right)$&lt;/h3&gt;
+&lt;p&gt;Metropolis-Hastings (MH) 算法中的接受概率
+&lt;/p&gt;
+$$
+A\left(x_t, x^{\prime}\right)=\min \left(1, \frac{p\left(x^{\prime}\right) q\left(x_t \mid x^{\prime}\right)}{p\left(x_t\right) q\left(x^{\prime} \mid x_t\right)}\right)
+$$&lt;p&gt;
+是一个精心设计的准则，旨在确保生成的样本 $x$ 的分布最终收敛到目标分布 $p(x)$ 。这里的 $x_t$ 是当前状态， $x^{\prime}$ 是建议的下一个状态， $q\left(x_t \mid x^{\prime}\right)$ 是从状态 $x^{\prime}$ 到状态 $x_t$ 的转移概率， $p(x)$ 是我们想要采样的分布。&lt;/p&gt;
+&lt;p&gt;理解这个接受概率的一个简单方法是考虑比率
+&lt;/p&gt;
+$$
+\frac{p\left(x^{\prime}\right) q\left(x_t \mid x^{\prime}\right)}{p\left(x_t\right) q\left(x^{\prime} \mid x_t\right)}
+$$&lt;p&gt;分子 $p\left(x^{\prime}\right) q\left(x_t \mid x^{\prime}\right)$ : 这部分表示我们建议从状态 $x^{\prime}$ 移动到 $x_t$ 并且 $x^{\prime}$ 本身的概率。实际 上，这部分衡量了建议的状态 $x^{\prime}$ 到当前状态 $x_t$ 的“前进”概率.&lt;/p&gt;
+&lt;p&gt;分母 $p\left(x_t\right) q\left(x^{\prime} \mid x_t\right)$ : 这部分表示我们建议从状态 $x_t$ 移动到状态 $x^{\prime}$ 并且 $x_t$ 本身的概率。这 部分衡量了当前状态 $x_t$ 到建议状态 $x^{\prime}$ 的“前进”概率.&lt;/p&gt;
+&lt;p&gt;这个比率的直观意义是一个“平衡”：我们想要平衡从当前状态到建议状态的前进概率和反方向 的前进概率。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Hamilton Regime Switching Model</title>
+      <link>http://localhost:1313/post/hamilton-filter/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/post/hamilton-filter/</guid>
+      <description>&lt;h2 id=&#34;hamilton-regime-switching-model&#34;&gt;Hamilton Regime Switching Model&lt;/h2&gt;
+&lt;h3 id=&#34;regime-switching-model&#34;&gt;Regime Switching model&lt;/h3&gt;
+&lt;p&gt;Hamilton (1989) presents the regime switching model, which is so influential and is one of the main reference paper of so many academic papers. Let $s_t=0,1,2, \ldots, k$ denotes the state variable with $k$ regimes. In case of a two-state regime switching model, $s_t=0$ and $s_t=1$ can be interpreted as the expansion and recession states at time $t$. A $k$-state regime switching linear regression model has the following form.
+&lt;/p&gt;
+$$
+\begin{array}{rlrl}
+    y_t=c_{s_t}+\beta_{s_t} x_t+\epsilon_{s_t, t}, &amp; &amp; \epsilon_{s_t, t} &amp; \sim N\left(0, \sigma_{s_t}\right) \\
+    &amp; \Downarrow &amp; &amp; \\
+    y_t=c_1+\beta_1 x_t+\epsilon_{1, t}, &amp; &amp; \epsilon_{1, t} \sim N\left(0, \sigma_1\right) \\
+    y_t=c_2+\beta_2 x_t+\epsilon_{2, t}, &amp; &amp; \epsilon_{2, t} \sim N\left(0, \sigma_2\right) \\
+    \cdots &amp; &amp; \\
+    y_t=c_k+\beta_k x_t+\epsilon_{k, t}, &amp; &amp; \epsilon_{k, t} \sim N\left(0, \sigma_k\right)
+\end{array}
+$$&lt;p&gt;
+Since $s_t$ can take on $0,1, \ldots, k$, a transition probability matrix is introduced to describe their transitions.&lt;/p&gt;
+&lt;h3 id=&#34;markov-transition-probability-matrix&#34;&gt;Markov Transition Probability Matrix&lt;/h3&gt;
+&lt;p&gt;Each period, the regime or state follows Markov transition probability matrix. Markov means that transition probability depends on not long history of state transitions but only one lag. As examples, two- or three-state transition probability matrix are of the following forms.
+two-state
+&lt;/p&gt;
+$$
+P\left(s_t=j \mid s_{t-1}=i\right)=P_{i j}=\left[\begin{array}{ll}
+    p_{00} &amp; p_{01} \\
+    p_{10} &amp; p_{11}
+\end{array}\right]
+$$&lt;p&gt;
+three-state
+&lt;/p&gt;
+$$
+P\left(s_t=j \mid s_{t-1}=i\right)=P_{i j}=\left[\begin{array}{lll}
+    p_{00} &amp; p_{01} &amp; p_{02} \\
+    p_{10} &amp; p_{11} &amp; p_{12} \\
+    p_{20} &amp; p_{21} &amp; p_{22}
+\end{array}\right]
+$$&lt;p&gt;
+where $p_{i j}$ is the probability of transitioning from regime $i$ at time $t-1$ to regime $j$ at time $t$.&lt;/p&gt;
+&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
+&lt;p&gt;A two-state regime switching linear regression model and a transition probability matrix are of the following forms.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    &amp; y_t=c_{s_t}+\beta_{s_t} x_t+\epsilon_{s_t, t}, \quad \epsilon_{s_t, t} \sim N\left(0, \sigma_{s_t}^2\right) \\
+    &amp; P\left(s_t=j \mid s_{t-1}=i\right)=P_{i j}=\left[\begin{array}{ll}
+        p_{00} &amp; p_{01} \\
+        p_{10} &amp; p_{11}
+    \end{array}\right]
+\end{aligned}
+$$&lt;p&gt;
+Here $s_t$ can take on 0 or 1 and $p_{i j}$ is the probability of transitioning from regime $i$ at time $t-1$ to regime $j$ at time $t$.&lt;/p&gt;
+&lt;h3 id=&#34;hamilton-filtering&#34;&gt;Hamilton Filtering&lt;/h3&gt;
+&lt;p&gt;Hamilton filter is of the following sequence as we presented it in the previous post.&lt;/p&gt;
+&lt;p&gt;1.$t-1$ state (previous state)&lt;/p&gt;
+$$
+\xi_{i, t-1}=P\left(s_{t-1}=i \mid \bar{y}_{t-1} ; \theta\right)
+$$&lt;p&gt;2.state transition from $i$ to $j$ (state propagation) &lt;/p&gt;
+$$p_{i j}$$&lt;p&gt;3.densities under the two regimes at $t$ (data observations and state dependent errors)&lt;/p&gt;
+$$
+\eta_{j t}=\frac{1}{\sqrt{2 \pi} \sigma} \exp \left[-\frac{\left(y_t-c_j-\beta_j x_t\right)^2}{2 \sigma_j^2}\right]
+$$&lt;p&gt;4.conditional density of the time $t$ observation (combined likelihood with state being collapsed):&lt;/p&gt;
+$$
+\begin{aligned}
+    f\left(y_t \mid \tilde{y}_{t-1} ; \theta\right) &amp; =\xi_{0, t-1} p_{00} \eta_{0 t}+\xi_{0, t-1} p_{01} \eta_{1 t} \\
+    &amp; +\xi_{1, t-1} p_{10} \eta_{0 t}+\xi_{1, t-1} p_{11} \eta_{1 t}
+\end{aligned}
+$$&lt;p&gt;5.$t$ posterior state (corrected from previous state)&lt;/p&gt;
+$$
+\xi_{j t}=\frac{\sum_{i=0}^1 \xi_{i, t-1} p_{i j} \eta_{j t}}{f\left(y_t \mid \bar{y}_{t-1} ; \theta\right)}
+$$&lt;p&gt;6.use posterior state at time $t$ as previous state a time $t+1$ (substitution)&lt;/p&gt;
+$$
+\xi_{j t} \rightarrow \xi_{i, t-1}
+$$&lt;p&gt;7.iterate 1 $\sim$ 6 from $t=1$ to $T$
+As a result of executing this iteration, the sample conditional log likelihood of the observed data can be calculated in the following way.&lt;/p&gt;
+$$
+\log f\left(\bar{y}_t \mid y_0 ; \theta\right)=\sum_{t=1}^T f\left(y_t \mid \bar{y}_{t-1} ; \theta\right)
+$$&lt;p&gt;
+With this log-likelihood function, we use a numerical optimization to find the best fitting parameter set $(\bar{\theta})$.&lt;/p&gt;
+&lt;h3 id=&#34;numerical-optimization&#34;&gt;Numerical Optimization&lt;/h3&gt;
+&lt;p&gt;To start iterations of the Hamilton filter, we need to set $\xi_{i, 0}$ and in most cases the unconditional state probabilities are used.
+&lt;/p&gt;
+$$
+\begin{aligned}
+    &amp; \xi_{0,0}=\frac{1-p_{11}}{2-p_{00}-p_{11}} \\
+    &amp; \xi_{1,0}=1-\xi_{0,0}
+\end{aligned}
+$$</description>
+    </item>
+    
+  </channel>
+</rss>

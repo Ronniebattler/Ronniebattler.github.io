@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Paper-Conference | Hugo Academic CV Theme</title>
+    <link>http://localhost:1313/publication_types/paper-conference/</link>
+      <atom:link href="http://localhost:1313/publication_types/paper-conference/index.xml" rel="self" type="application/rss+xml" />
+    <description>Paper-Conference</description>
+    <generator>Hugo Blox Builder (https://hugoblox.com)</generator><language>en-us</language><lastBuildDate>Fri, 28 Jun 2024 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>http://localhost:1313/media/icon_hu7729264130191091259.png</url>
+      <title>Paper-Conference</title>
+      <link>http://localhost:1313/publication_types/paper-conference/</link>
+    </image>
+    
+    <item>
+      <title>A Bayesian estimation approach of random switching exponential smoothing with application to credit forecast</title>
+      <link>http://localhost:1313/conference/icsa-2024/</link>
+      <pubDate>Fri, 28 Jun 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/conference/icsa-2024/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>The Impact of Fintech on the Operational Efficiency of Commercial Banks in China</title>
+      <link>http://localhost:1313/conference/quantitative-finance-and-insurance-branch-annual-conference-chinese/</link>
+      <pubDate>Fri, 26 May 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/conference/quantitative-finance-and-insurance-branch-annual-conference-chinese/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>A Dynamic Programming Algorithm for MSM Based on Markov Loss Function</title>
+      <link>http://localhost:1313/workpaper/acta-chinese/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/workpaper/acta-chinese/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Learning Performance of Nonlinear Classification Models Based on Markov Sampling</title>
+      <link>http://localhost:1313/workpaper/applied-prob-stat-chinese/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/workpaper/applied-prob-stat-chinese/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

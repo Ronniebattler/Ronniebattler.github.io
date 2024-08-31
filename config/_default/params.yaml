@@ -36,7 +36,9 @@ header:
     show_theme_chooser: true
     logo:
       text: ""
-
+      # Logo filename in `assets/media/` folder
+      filename: "logo.svg"
+      
 # Site footer
 footer:
   copyright:

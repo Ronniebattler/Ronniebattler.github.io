@@ -37,8 +37,8 @@ header:
     logo:
       text: ""
       # Logo filename in `assets/media/` folder
-      filename: "logo.svg"
-      
+      # filename: "logo.svg"
+
 # Site footer
 footer:
   copyright:

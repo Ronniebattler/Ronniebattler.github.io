@@ -9,6 +9,7 @@ featured: false
 image:
   preview_only: true
 publication: "*Acta Mathematicae Applicatae Sinica (Chinese Series)*"
+url: "https://link.oversea.cnki.net/doi/10.20142/j.cnki.amas.202401051"
 url_pdf: "https://link.oversea.cnki.net/doi/10.20142/j.cnki.amas.202401051"
 doi: "https://doi.org/10.20142/j.cnki.amas.202401051"
 ---

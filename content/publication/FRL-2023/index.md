@@ -9,6 +9,7 @@ featured: false
 image:
   preview_only: true
 publication: "*Finance Research Letters*"
+url: "https://www.sciencedirect.com/science/article/abs/pii/S1544612323008978"
 url_pdf: "https://www.pure.ed.ac.uk/ws/portalfiles/portal/382303936/WangEtal2023FRLABayesianEstimationApproach.pdf"
 doi: "https://doi.org/10.1016/j.frl.2023.104525"
 ---

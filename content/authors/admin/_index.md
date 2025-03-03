@@ -49,7 +49,7 @@ interests:
   - Time Series Modelling
 
 education:
-- area: PhD Student
+  - area: PhD Student
     institution: Monash University
     date_start: 2025-02-23
 
@@ -167,4 +167,4 @@ awards:
 
 ## About Me
 
-Hello, there! My current research interests focus on high-dimensional hidden state models and nonparametric statistics. 
+Hello, there! My current research interests focus on high-dimensional hidden state models and nonparametric statistics.

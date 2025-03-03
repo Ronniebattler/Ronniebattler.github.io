@@ -43,12 +43,16 @@ profiles:
     #url: https://www.instagram.com/
 
 interests:
-  - Artificial Intelligence
+  # - Artificial Intelligence
   - High-Dimensional Hidden State Models
   - Nonparametric Statistics
   - Time Series Modelling
 
 education:
+- area: PhD Student
+    institution: Monash University
+    date_start: 2025-02-23
+
   - area: Master of Science in Mathematical Statistics
     institution: Zhongnan University of Economics and Law
     date_start: 2021-09-01
@@ -57,11 +61,11 @@ education:
       GPA: 89.71/100
 
       Courses included:
-      - Advanced Probability Theory
-      - Statistical Computing and Software
-      - Non-parametric Statistics
-      - Advanced Mathematical Statistics 
-      - Asymptotic Statistical Theory
+     # - Advanced Probability Theory
+      #- Statistical Computing and Software
+      #- Non-parametric Statistics
+     # - Advanced Mathematical Statistics 
+      #- Asymptotic Statistical Theory
     # button:
       # text: 'Read Thesis'
       #url: 'https://example.com'
@@ -74,14 +78,14 @@ education:
     summary: |
       GPA: 87.06/100 & 84.91/100 (Minor)
       
-      Courses included:
-      - Mathematical Analysis
-      - Advanced Algebra
-      - Probability Theory and Mathematical Statistics
-      - Stochastic Process
-      - Time Series and Analysis
-      - Macro and Microeconomics
-      - Database (SQL)
+     # Courses included:
+     # - Mathematical Analysis
+     # - Advanced Algebra
+     # - Probability Theory and Mathematical Statistics
+     # - Stochastic Process
+      #- Time Series and Analysis
+     # - Macro and Microeconomics
+     # - Database (SQL)
 
 # Skills
 # Add your own SVG icons to `assets/media/icons/`
@@ -147,20 +151,20 @@ awards:
       #- Gain an in-depth understanding of the specific mechanics of Bitcoin
       #- Understand Bitcoin’s real-life applications and learn how to attack and destroy Bitcoin, Ethereum, smart contracts and Dapps, and alternatives to Bitcoin’s Proof-of-Work consensus algorithm
   
-  - title: Second Prize in National Graduate Student Market Survey and Analysis Contest
-    date: '2023-05-01'
-    awarder: Commerce Statistical Society of China
+  #- title: Second Prize in National Graduate Student Market Survey and Analysis Contest
+  #  date: '2023-05-01'
+  #  awarder: Commerce Statistical Society of China
 
-  - title: Second Prize in National Graduate Student Case Competition in Applied Statistics
-    date: '2022-10-01'
-    awarder: National Mas Education Steering Committee
+  #- title: Second Prize in National Graduate Student Case Competition in Applied Statistics
+ #   date: '2022-10-01'
+   # awarder: National Mas Education Steering Committee
 
-  - title: First Prize in China Undergraduate Mathematical Contest in Modelling (CUMCM)
-    url: https://en.mcm.edu.cn/
-    date: '2019-11-01'
-    awarder: CSIAM (China Society for Industrial and Applied Mathematics) 
+  #- title: First Prize in China Undergraduate Mathematical Contest in Modelling (CUMCM)
+  #  url: https://en.mcm.edu.cn/
+  #  date: '2019-11-01'
+  #  awarder: CSIAM (China Society for Industrial and Applied Mathematics) 
 ---
 
 ## About Me
 
-Hello, there! My current research interests focus on high-dimensional hidden state models and nonparametric statistics. These studies are primarily applied to fields such as economics, energy, and climate, aiming to analyze complex data through advanced statistical techniques and propose innovative solutions to address various challenges we face today.
+Hello, there! My current research interests focus on high-dimensional hidden state models and nonparametric statistics. 

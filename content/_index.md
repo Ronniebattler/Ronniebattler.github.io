@@ -17,19 +17,19 @@ sections:
       # Show a call-to-action button under your biography? (optional)
       button:
         text: Download CV
-        url: uploads/Renhe_Wang_CV.pdf
-    design:
-      css_class: dark
-      background:
-        color: black
-        image:
+        url: uploads/CV_Renhe_Wang.pdf
+   # design:
+    #  css_class: dark
+     # background:
+     #   color: white
+        #image:
           # Add your image background to `assets/media/`.
-          filename: Polygon_Luminary.svg
-          filters:
-            brightness: 1.0
-          size: cover
-          position: center
-          parallax: false
+       #   filename: #Polygon_Luminary.svg
+      #    filters:
+        #    brightness: 1.0
+       #   size: cover
+        #  position: center
+       #   parallax: false
   - block: markdown
     content:
       title: '📚 My Research'

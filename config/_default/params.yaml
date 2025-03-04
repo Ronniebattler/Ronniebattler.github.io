@@ -60,3 +60,13 @@ features:
     enable: false
   privacy_pack:
     enable: false
+
+# Picture Size
+avatar:
+  path: "avatar.jpg"  # 你的头像文件路径
+  width: 350          # 设置宽度
+  height: 350         # 设置高度
+
+# My own style
+custom_css:
+  - assets/scss/custom.scss

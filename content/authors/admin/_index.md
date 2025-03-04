@@ -57,10 +57,10 @@ education:
     institution: Zhongnan University of Economics and Law
     date_start: 2021-09-01
     date_end: 2024-07-01
-    summary: |
-      GPA: 89.71/100
+    #summary: |
+     # GPA: 89.71/100
 
-      Courses included:
+     # Courses included:
      # - Advanced Probability Theory
       #- Statistical Computing and Software
       #- Non-parametric Statistics
@@ -71,12 +71,12 @@ education:
       #url: 'https://example.com'
 
 
-  - area: BSc  Statistics & Finance (Minor)
+  - area: BSc Statistics & Finance (Minor)
     institution: Jiangxi Normal University
     date_start: 2017-09-01
     date_end: 2021-07-01
-    summary: |
-      GPA: 87.06/100 & 84.91/100 (Minor)
+    #summary: |
+     # GPA: 87.06/100 & 84.91/100 (Minor)
       
      # Courses included:
      # - Mathematical Analysis
@@ -165,6 +165,6 @@ awards:
   #  awarder: CSIAM (China Society for Industrial and Applied Mathematics) 
 ---
 
-## About Me
+## Hey, I'm Renhe
 
-Hello, there! My current research interests focus on high-dimensional hidden state models and nonparametric statistics.
+I am a PhD student at Monash University. My current research interests focus on high-dimensional hidden state models and nonparametric statistics.

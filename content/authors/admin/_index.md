@@ -167,4 +167,4 @@ awards:
 
 ## Hey, I'm Renhe
 
-I am a PhD student at Monash University. My current research interests focus on high-dimensional hidden state models and nonparametric statistics.
+I am a PhD student at Monash University. My current research interests focus on high-dimensional hidden state models and nonparametric statistics, supervised by [Prof. Jiti Gao](https://research.monash.edu/en/persons/jiti-gao) and [Prof. Xibin Zhang](https://research.monash.edu/en/persons/xibin-zhang).

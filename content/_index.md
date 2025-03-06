@@ -36,7 +36,7 @@ sections:
       subtitle: ''
       text: |-
 
-        I currently focuse on high-dimensional hidden state models and nonparametric statistics. My work is situated at the intersection of advanced statistical methodologies and their practical applications within the fields of economics, energy, and climate 🤗.
+        I currently focus on high-dimensional hidden state models and nonparametric statistics. My work is situated at the intersection of advanced statistical methodologies and their practical applications within the fields of economics, energy, and climate 🤗.
 
        # Utilizing a blend of cutting-edge statistical techniques, my aim is to dissect and understand complex data sets to unearth underlying patterns and dynamics. This analytical approach not only aids in enhancing our understanding of these critical sectors but also in crafting innovative solutions tailored to meet the specific challenges they present.
 

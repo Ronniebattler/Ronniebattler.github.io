@@ -1,0 +1,42 @@
+---
+title: "Blogs"
+toc: false
+---
+
+::::::::::: blog-page
+::: category-box
+##### Categories
+
+[All]{.tag-chip} [Markov switching]{.tag-chip} [Hidden Markov model]{.tag-chip} [Dynamic programming]{.tag-chip} [Econometrics]{.tag-chip}
+:::
+
+::::::::: post-list
+::::: post-item
+### [Viterbi Algorithm](posts/viterbi-algorithm/)
+
+::: post-tags
+[Hidden Markov model]{.tag-chip} [Dynamic programming]{.tag-chip}
+:::
+
+A note on the Viterbi algorithm and a Markov-switching example.
+
+::: post-date
+30 Oct 2023
+:::
+:::::
+
+::::: post-item
+### [Hamilton Regime Switching Model](posts/hamilton-regime-switching-model/)
+
+::: post-tags
+[Markov switching]{.tag-chip} [Econometrics]{.tag-chip}
+:::
+
+A short note on Hamilton filtering for regime-switching models.
+
+::: post-date
+10 Oct 2023
+:::
+:::::
+:::::::::
+:::::::::::

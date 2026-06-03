@@ -1,0 +1,28 @@
+---
+title: "Selected Papers"
+toc: false
+---
+
+## Publications
+
+:::::: paper-list
+::: paper-item
+Hu, S., Wang, Y., Qian, Z., & Wang, R. (2026). Learning performance of nonlinear classification models based on Markov sampling. *Chinese Journal of Applied Probability and Statistics, 42*(1), 1-14. <https://doi.org/10.12460/j.issn.1001-4268.aps.2026.2024036>
+:::
+
+::: paper-item
+Hu, S., Qian, Z., Wang, R., & Wang, X. (2025). Learning performance analysis of perceptron model based on Markov sampling. *Acta Mathematicae Applicatae Sinica (Chinese Series), 5*. <https://doi.org/10.20142/j.cnki.amas.202401051>
+:::
+
+::: paper-item
+Wang, R., Wang, T., Qian, Z., & Hu, S. (2023). A Bayesian estimation approach of random switching exponential smoothing with application to credit forecast. *Finance Research Letters, 58*, Article 104525. <https://doi.org/10.1016/j.frl.2023.104525>
+:::
+::::::
+
+## Working Papers
+
+:::: paper-list
+::: paper-item
+Wang, X., Wang, Y., Wang, R., & Qian, Z. (2025). *A dynamic programming algorithm for MSM based on Markov loss function*. Submitted.
+:::
+::::
